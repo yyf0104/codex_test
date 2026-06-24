@@ -1,0 +1,784 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山·间 | 现代中式餐厅</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            color: #1a1a1a;
+            background: #faf8f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+        nav.scrolled {
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+            padding: 12px 48px;
+        }
+        .nav-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 3px;
+            transition: color 0.3s;
+        }
+        nav.scrolled .nav-logo { color: #1a1a1a; }
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 1px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: #fff; }
+        nav.scrolled .nav-links a { color: #555; }
+        nav.scrolled .nav-links a:hover { color: #1a1a1a; }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 26px; height: 2px;
+            background: #fff;
+            transition: all 0.3s;
+            border-radius: 1px;
+        }
+        nav.scrolled .menu-toggle span { background: #1a1a1a; }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80') center/cover no-repeat;
+            transform: scale(1.05);
+            transition: transform 0.1s linear;
+            will-change: transform;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(0,0,0,0.65) 0%,
+                rgba(0,0,0,0.35) 40%,
+                rgba(0,0,0,0.2) 100%
+            );
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            padding: 0 24px;
+            max-width: 800px;
+        }
+        .hero-subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: 8px;
+        }
+        .hero-desc {
+            font-size: 1.05rem;
+            font-weight: 300;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        .hero-btn {
+            display: inline-block;
+            padding: 14px 48px;
+            border: 1.5px solid rgba(255,255,255,0.7);
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+        .hero-btn:hover {
+            background: #fff;
+            color: #1a1a1a;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ── Section common ── */
+        section { padding: 100px 48px; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .section-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #b8860b;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: 3px;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px; height: 2px;
+            background: #b8860b;
+            margin: 16px auto 0;
+        }
+
+        /* ── About ── */
+        .about { background: #fff; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .about-image {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            border-radius: 0;
+        }
+        .about-text h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        .about-text p {
+            color: #666;
+            line-height: 1.9;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .about-signature {
+            margin-top: 32px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: #b8860b;
+            letter-spacing: 2px;
+        }
+
+        /* ── Menu / Dishes ── */
+        .dishes { background: #faf8f5; }
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .dish-card {
+            background: #fff;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+        .dish-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+        }
+        .dish-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+        .dish-info {
+            padding: 28px 24px 32px;
+        }
+        .dish-info h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .dish-info .dish-desc {
+            color: #888;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .dish-info .dish-price {
+            color: #b8860b;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* ── Chef ── */
+        .chef {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 120px 48px;
+            position: relative;
+        }
+        .chef::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1920&q=80') center/cover no-repeat;
+            opacity: 0.15;
+        }
+        .chef-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .chef-inner blockquote {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 300;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 32px;
+            letter-spacing: 2px;
+        }
+        .chef-inner cite {
+            font-style: normal;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: #b8860b;
+        }
+
+        /* ── Reservation ── */
+        .reservation { background: #fff; }
+        .reservation-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .reservation-inner p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+        .res-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .res-form .full-width { grid-column: 1 / -1; }
+        .res-form label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 6px;
+        }
+        .res-form input,
+        .res-form select,
+        .res-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            background: #faf8f5;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            border-radius: 0;
+        }
+        .res-form input:focus,
+        .res-form select:focus,
+        .res-form textarea:focus {
+            outline: none;
+            border-color: #b8860b;
+        }
+        .res-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .res-form button {
+            grid-column: 1 / -1;
+            padding: 16px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .res-form button:hover {
+            background: #b8860b;
+        }
+
+        /* ── Contact ── */
+        .contact {
+            background: #1a1a1a;
+            color: #aaa;
+            padding: 80px 48px 0;
+        }
+        .contact-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 64px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .contact-brand {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .contact-col h5 {
+            color: #fff;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .contact-col p {
+            font-size: 0.85rem;
+            line-height: 2;
+        }
+        .contact-col a {
+            color: #aaa;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            line-height: 2;
+            transition: color 0.3s;
+        }
+        .contact-col a:hover { color: #b8860b; }
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in.delay-1 { transition-delay: 0.1s; }
+        .fade-in.delay-2 { transition-delay: 0.2s; }
+        .fade-in.delay-3 { transition-delay: 0.3s; }
+        .fade-in.delay-4 { transition-delay: 0.4s; }
+        .fade-in.delay-5 { transition-delay: 0.5s; }
+
+        /* ── Mobile ── */
+        @media (max-width: 900px) {
+            nav { padding: 16px 24px; }
+            nav.scrolled { padding: 12px 24px; }
+
+            .nav-links {
+                position: fixed;
+                top: 0; right: -100%;
+                width: 280px; height: 100vh;
+                background: rgba(26,26,26,0.98);
+                flex-direction: column;
+                gap: 0;
+                padding: 80px 40px;
+                transition: right 0.4s ease;
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a {
+                color: rgba(255,255,255,0.8);
+                padding: 16px 0;
+                font-size: 0.9rem;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+            }
+            nav.scrolled .nav-links a { color: rgba(255,255,255,0.8); }
+            nav.scrolled .nav-links a:hover { color: #fff; }
+            .menu-toggle { display: flex; }
+
+            section { padding: 60px 24px; }
+            .about-grid { grid-template-columns: 1fr; gap: 32px; }
+            .about-image { height: 300px; }
+            .dishes-grid { grid-template-columns: 1fr; }
+            .dish-card img { height: 220px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+            .res-form { grid-template-columns: 1fr; }
+            .hero-title { letter-spacing: 4px; }
+        }
+
+        @media (max-width: 480px) {
+            nav { padding: 12px 16px; }
+            nav.scrolled { padding: 10px 16px; }
+            section { padding: 48px 16px; }
+            .hero-btn { padding: 12px 32px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">山·间</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#dishes">精选菜品</a></li>
+            <li><a href="#chef">主厨推荐</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-content">
+            <p class="hero-subtitle">Modern Chinese Cuisine</p>
+            <h1 class="hero-title">山·间</h1>
+            <p class="hero-desc">以自然之名，还原食物本真的味道。<br>在山水之间，品味四季流转的馈赠。</p>
+            <a href="#reservation" class="hero-btn">预订餐位</a>
+        </div>
+        <div class="hero-scroll">向下探索</div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about">
+        <div class="section-header fade-in">
+            <span class="section-tag">About Us</span>
+            <h2 class="section-title">关于我们</h2>
+        </div>
+        <div class="about-grid">
+            <img
+                class="about-image fade-in delay-1"
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+                alt="餐厅内景"
+                loading="lazy"
+            >
+            <div class="about-text fade-in delay-2">
+                <h3>源于山野，归于本味</h3>
+                <p>
+                    「山·间」诞生于对自然与食物的敬畏之心。我们坚信，最打动人心的味道，
+                    往往来自最质朴的食材。每一道菜，都是与山川大地的对话。
+                </p>
+                <p>
+                    主厨团队深入中国各地，寻找那些被遗忘的时令风物，用现代的烹饪语言重新诠释。
+                    在这里，传统与创新交汇，呈现一场属于味觉的山水之旅。
+                </p>
+                <div class="about-signature">—— 山间厨房 · 敬呈</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dishes -->
+    <section id="dishes" class="dishes">
+        <div class="section-header fade-in">
+            <span class="section-tag">Signature</span>
+            <h2 class="section-title">精选菜品</h2>
+        </div>
+        <div class="dishes-grid">
+            <div class="dish-card fade-in delay-1">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="时蔬沙拉" loading="lazy">
+                <div class="dish-info">
+                    <h4>山野时蔬</h4>
+                    <p class="dish-desc">选用当季有机蔬菜，配以松露油醋汁，清新爽口</p>
+                    <span class="dish-price">¥ 88</span>
+                </div>
+            </div>
+            <div class="dish-card fade-in delay-2">
+                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&q=80" alt="烤鸭" loading="lazy">
+                <div class="dish-info">
+                    <h4>慢烤樱桃鸭</h4>
+                    <p class="dish-desc">经48小时低温慢煮，表皮酥脆，肉质鲜嫩多汁</p>
+                    <span class="dish-price">¥ 268</span>
+                </div>
+            </div>
+            <div class="dish-card fade-in delay-3">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="甜品" loading="lazy">
+                <div class="dish-info">
+                    <h4>桂花山药糕</h4>
+                    <p class="dish-desc">手工山药泥配以桂花蜜，清甜绵密，余韵悠长</p>
+                    <span class="dish-price">¥ 68</span>
+                </div>
+            </div>
+            <div class="dish-card fade-in delay-4">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="牛排" loading="lazy">
+                <div class="dish-info">
+                    <h4>火焰澳洲和牛</h4>
+                    <p class="dish-desc">M9+ 和牛，铁板炙烤佐以山椒酱</p>
+                    <span class="dish-price">¥ 488</span>
+                </div>
+            </div>
+            <div class="dish-card fade-in delay-5">
+                <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80" alt="汤品" loading="lazy">
+                <div class="dish-info">
+                    <h4>松茸竹荪汤</h4>
+                    <p class="dish-desc">云南野生松茸配高山竹荪，慢炖四小时</p>
+                    <span class="dish-price">¥ 128</span>
+                </div>
+            </div>
+            <div class="dish-card fade-in delay-1">
+                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80" alt="甜点拼盘" loading="lazy">
+                <div class="dish-info">
+                    <h4>四季甜品拼盘</h4>
+                    <p class="dish-desc">主厨精选四款时令甜品，为用餐画上完美句点</p>
+                    <span class="dish-price">¥ 98</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chef -->
+    <section id="chef" class="chef">
+        <div class="chef-inner fade-in">
+            <blockquote>
+                "好的食材不需要过多的修饰，<br>
+                它们自己会说话。我们的工作，<br>
+                只是倾听并让它们以最完美的姿态呈现。"
+            </blockquote>
+            <cite>—— 陈远 主厨 · 山·间 创始人</cite>
+        </div>
+    </section>
+
+    <!-- Reservation -->
+    <section id="reservation" class="reservation">
+        <div class="section-header fade-in">
+            <span class="section-tag">Reservation</span>
+            <h2 class="section-title">预订餐位</h2>
+        </div>
+        <div class="reservation-inner fade-in delay-1">
+            <p>我们期待您的到来。请填写以下信息，我们将为您安排完美的用餐体验。</p>
+            <form class="res-form" onsubmit="handleReservation(event)">
+                <div>
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div>
+                    <label for="phone">电话</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div>
+                    <label for="date">日期</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div>
+                    <label for="time">时间</label>
+                    <select id="time" required>
+                        <option value="">请选择</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="guests">人数</label>
+                    <select id="guests" required>
+                        <option value="1">1 位</option>
+                        <option value="2" selected>2 位</option>
+                        <option value="3">3 位</option>
+                        <option value="4">4 位</option>
+                        <option value="5">5 位</option>
+                        <option value="6">6 位</option>
+                        <option value="8">8+ 位</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="occasion">场合</label>
+                    <select id="occasion">
+                        <option value="">请选择</option>
+                        <option value="日常用餐">日常用餐</option>
+                        <option value="生日">生日</option>
+                        <option value="纪念日">纪念日</option>
+                        <option value="商务宴请">商务宴请</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="full-width">
+                    <label for="notes">备注</label>
+                    <textarea id="notes" placeholder="如有特殊需求，请在此说明…"></textarea>
+                </div>
+                <button type="submit">确认预订</button>
+            </form>
+            <div id="resSuccess" style="display:none;text-align:center;padding:32px 0;">
+                <p style="font-family:'Noto Serif SC',serif;font-size:1.3rem;color:#b8860b;margin-bottom:8px;">预订已提交</p>
+                <p style="color:#888;font-size:0.9rem;">感谢您的预订，我们将尽快与您确认。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <footer id="contact" class="contact">
+        <div class="contact-grid">
+            <div>
+                <div class="contact-brand">山·间</div>
+                <p>现代中式料理 · 以自然之本，呈现味觉山水</p>
+            </div>
+            <div class="contact-col">
+                <h5>联系方式</h5>
+                <p>杭州市西湖区龙井路 88 号</p>
+                <p>电话：0571-8888-8888</p>
+                <p>邮箱：hello@shanjian.com</p>
+            </div>
+            <div class="contact-col">
+                <h5>营业时间</h5>
+                <p>午餐 11:30 - 14:00</p>
+                <p>晚餐 17:30 - 21:30</p>
+                <p>周一休息</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 山·间 — All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // ── Navbar scroll effect ──
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ── Parallax hero ──
+        const heroBg = document.getElementById('heroBg');
+        window.addEventListener('scroll', () => {
+            const offset = window.scrollY * 0.35;
+            heroBg.style.transform = `scale(1.05) translateY(${offset}px)`;
+        });
+
+        // ── Mobile menu ──
+        const toggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        });
+
+        // ── Scroll reveal ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ── Reservation form ──
+        window.handleReservation = function (e) {
+            e.preventDefault();
+            const form = e.target;
+            form.style.display = 'none';
+            document.getElementById('resSuccess').style.display = 'block';
+        };
+
+        // ── Set min date to today ──
+        document.getElementById('date').min = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>
